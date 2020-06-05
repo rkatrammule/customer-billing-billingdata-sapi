@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:munit="http://www.mulesoft.org/schema/mule/munit" xmlns:munit-tools="http://www.mulesoft.org/schema/mule/munit-tools"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xsi:schemaLocation="
+		http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+		http://www.mulesoft.org/schema/mule/munit http://www.mulesoft.org/schema/mule/munit/current/mule-munit.xsd
+		http://www.mulesoft.org/schema/mule/munit-tools  http://www.mulesoft.org/schema/mule/munit-tools/current/mule-munit-tools.xsd">
+	<munit:config name="new-test-suite.xml" />
+	<munit:test name="new-test-suite-get:\billing\accounts\(ban)\systems\(billerId)\history:customer-billing-billingdata-sapi-configTest" doc:id="c06c46c6-a9ed-44aa-a220-adafa603b9bf" description="Test">
+		<munit:execution >
+			<flow-ref doc:name="Flow-ref to get:\billing\accounts\(ban)\systems\(billerId)\history:customer-billing-billingdata-sapi-config" doc:id="bafcf840-3ba8-4d1a-8477-502b300f0634" name="get:\billing\accounts\(ban)\systems\(billerId)\history:customer-billing-billingdata-sapi-config"/>
+		</munit:execution>
+	</munit:test>
+	<munit:test name="new-test-suite-get:\billing\statements\(statementId)\details:customer-billing-billingdata-sapi-configTest" doc:id="6b129bfa-31e7-4685-8295-ed1a2bd38b08" description="Test" ignore="true">
+		<munit:execution >
+			<flow-ref doc:name="Flow-ref to get:\billing\statements\(statementId)\details:customer-billing-billingdata-sapi-config" doc:id="f4a41c11-5e73-4992-84b0-895083db2236" name="get:\billing\statements\(statementId)\details:customer-billing-billingdata-sapi-config"/>
+		</munit:execution>
+	</munit:test>
+	<munit:test name="new-test-suite-get:\billing\statements\(statementId)\PDF:customer-billing-billingdata-sapi-configTest" doc:id="a9e2aea6-3935-461b-bfa3-3e8163f11fd7" description="Test" ignore="true">
+		<munit:execution >
+			<flow-ref doc:name="Flow-ref to get:\billing\statements\(statementId)\PDF:customer-billing-billingdata-sapi-config" doc:id="5439f39f-9941-4d3b-8f63-14b033946370" name="get:\billing\statements\(statementId)\PDF:customer-billing-billingdata-sapi-config"/>
+		</munit:execution>
+	</munit:test>
+
+
+</mule>

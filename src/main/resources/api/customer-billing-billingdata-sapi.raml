@@ -1,0 +1,77 @@
+#%RAML 1.0
+title: Customer Billing System API
+version: v1
+baseUri: https://{host}/{apiName}-{env}/{version}
+baseUriParameters:
+  host:
+    example: "api.att.com"      
+  apiName: 
+    example: "customer-billing-billingdata-sapi"      
+  env:
+      example: "qa"        
+  version:
+      example : "v1" 
+     
+securitySchemes:
+protocols:
+  - HTTPS  
+traits:
+  client-id-secret-required:
+    headers:
+      client_id:
+        type: string
+      client_secret:
+        type: string
+  standard-error:
+    responses:
+      500:
+        body:
+          application/json:
+            example:
+              !include examples/errorMessage.json
+
+
+/billing:
+  /accounts:    
+    /{ban}:
+      /systems:
+        /{billerId}:
+          /history:            
+            uriParameters:
+              ban:
+                description: Billing Account Number and Account ID for DTV
+              billerId:
+                description: AMDOCS Billing System Name
+                enum:
+                  - ENBLR
+                  - TLG  
+                            
+            get:
+              is: [client-id-secret-required,standard-error]           
+              responses:
+                200:
+                  body:
+                    application/json:
+                      !include examples/getBillingCycleHistoryResExample.json
+  /statements:
+    /{statementId}:
+      /details:
+        get:
+          is: [client-id-secret-required,standard-error]           
+          responses:
+            200:
+              body:
+                application/json:
+                  !include examples/getBillDetailsResExample.json
+      /PDF:
+        get:          
+          is: [client-id-secret-required,]           
+          responses:
+            200:
+              body:
+                              
+                application/json:
+                  examples: 
+                        success: !include examples/getBillingPDFResExample.json
+                        error: !include examples/getBillingErrorPDFResExample.json
+            

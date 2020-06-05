@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mule xmlns:att-mule-applicationlogger="http://www.mulesoft.org/schema/mule/att-mule-applicationlogger"
+	xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:apikit="http://www.mulesoft.org/schema/mule/mule-apikit"
+	xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/mule/mule-apikit/current/mule-apikit.xsd 
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
+http://www.mulesoft.org/schema/mule/att-mule-applicationlogger http://www.mulesoft.org/schema/mule/att-mule-applicationlogger/current/mule-att-mule-applicationlogger.xsd">
+
+	<apikit:config
+		name="customer-billing-billingdata-sapi-config"
+		api="customer-billing-billingdata-sapi.raml"
+		outboundHeadersMapName="outboundHeaders"
+		httpStatusVarName="httpStatus" />
+	<flow name="customer-billing-billingdata-sapi-main">
+		<http:listener
+			config-ref="customer-billing-billingdata-sapi-httpListenerConfig"
+			path="/api/*">
+			<http:response
+				statusCode="#[vars.httpStatus default 200]">
+				<http:headers>#[vars.outboundHeaders default {}]</http:headers>
+			</http:response>
+			<http:error-response
+				statusCode="#[vars.httpStatus default 500]">
+				<http:body>#[payload]</http:body>
+				<http:headers>#[vars.outboundHeaders default {}]</http:headers>
+			</http:error-response>
+		</http:listener>
+		<apikit:router
+			config-ref="customer-billing-billingdata-sapi-config" />
+
+	</flow>
+	<flow
+		name="get:\billing\accounts\(ban)\systems\(billerId)\history:customer-billing-billingdata-sapi-config">
+		<ee:transform
+			xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core">
+			<ee:variables>
+				<ee:set-variable variableName="ban">attributes.uriParams.'ban'
+				</ee:set-variable>
+				<ee:set-variable variableName="billerId">attributes.uriParams.'billerId'
+				</ee:set-variable>
+			</ee:variables>
+		</ee:transform>
+	<att-mule-applicationlogger:log-message doc:name="Log Message" doc:id="cf40c681-9392-4034-b92b-1db47e18d499" config-ref="ATT_Mule_Application_Logger_Config" resPayload="#[vars.ban ++ '  ' ++ vars.billerId]"/>
+		<http:request method="GET" doc:name="Billing History Request" doc:id="3a18f05d-07b4-419b-a507-44bad1cd423e" config-ref="HTTPS_Billing_MicroService_Request_config" path='${secure::billingMicroservice.http.billCycleHistoryPath}'>
+			<http:headers><![CDATA[#[output application/java
+---
+{
+	"Authorization":"Basic bTIzOTgwQGlkcC5hdHQuY29tOmlkcEs4c3J2Y3NBdXRobnAhIQ==",
+	"Accept": "application/json",
+	"Content-Type": "application/json",
+	"Idpctx-linkeduverseaccnums": "100398965"
+}]]]></http:headers>
+			<http:uri-params ><![CDATA[#[output application/java
+---
+{
+	"biller" : vars.billerId,
+	"ban" : vars.ban
+}]]]></http:uri-params>
+		</http:request>
+		</flow>
+	
+	<flow
+		name="get:\billing\statements\(statementId)\details:customer-billing-billingdata-sapi-config">
+		<ee:transform doc:name="Transform Message" doc:id="63a33b77-460e-41b3-a85d-cb014f3717c4" >			
+			<ee:variables >
+				<ee:set-variable variableName = "statementId">attributes.uriParams.'statementId'</ee:set-variable>
+			</ee:variables>
+		</ee:transform>
+		<att-mule-applicationlogger:log-message doc:name="Log Message" doc:id="1a4879a0-37f9-4afd-acc1-0124bcf761eb" config-ref="ATT_Mule_Application_Logger_Config" resPayload="#[vars.statementId]"/>
+		<http:request method="GET" doc:name="Bill Details Request" doc:id="a0736a80-6ffd-4c17-895a-a999ac20f163" config-ref="HTTPS_Billing_MicroService_Request_config" path='${secure::billingMicroservice.http.billDetailsPath}'>
+			<http:headers><![CDATA[#[output application/java
+---
+{
+	"Authorization":"Basic bTIzOTgwQGlkcC5hdHQuY29tOmlkcEs4c3J2Y3NBdXRobnAhIQ==",
+	"Accept": "application/json",
+	"Content-Type": "application/json",
+	"Idpctx-linkeduverseaccnums": "100398965"
+}]]]></http:headers>
+			<http:uri-params ><![CDATA[#[output application/java
+---
+{
+	"statementID" : vars.statementId
+}]]]></http:uri-params>
+		</http:request>
+	</flow>
+	<flow
+		name="get:\billing\statements\(statementId)\PDF:customer-billing-billingdata-sapi-config">
+		<ee:transform
+			xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core">
+			<ee:variables>
+				<ee:set-variable variableName="statementId">attributes.uriParams.'statementId'
+				</ee:set-variable>
+			</ee:variables>
+		</ee:transform>	
+		<att-mule-applicationlogger:log-message doc:name="Log Message" doc:id="c406b697-d7f5-4a17-a5fb-117270e1b99e" config-ref="ATT_Mule_Application_Logger_Config" resPayload="#[vars.statementId]"/>	
+		<http:request method="GET" doc:name="Bill PDF Request" doc:id="67cec755-5a6e-4502-818a-c800bc138913" config-ref="HTTPS_Billing_MicroService_Request_config" path='${secure::billingMicroservice.http.billPdfPath}'>
+			<http:headers><![CDATA[#[output application/java
+---
+{
+	"Authorization":"Basic bTIzOTgwQGlkcC5hdHQuY29tOmlkcEs4c3J2Y3NBdXRobnAhIQ==",
+	"Accept": "application/json",
+	"Content-Type": "application/json",
+	"Idpctx-linkeduverseaccnums": "100398965"
+}]]]></http:headers>
+			<http:uri-params ><![CDATA[#[output application/java
+---
+{
+	"statementID" : vars.statementId
+}]]]></http:uri-params>
+		</http:request>
+	</flow>
+</mule>

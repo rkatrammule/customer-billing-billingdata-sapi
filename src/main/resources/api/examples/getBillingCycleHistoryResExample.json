@@ -1,0 +1,73 @@
+{
+    "content": {
+        "billFound": true,
+        "billHistoryData": [
+            {
+                "statementID": "20200228-100398965-ENBLR-V",
+                "cycleStartDate": "01/29/2020",
+                "cycleEndDate": "02/28/2020",
+                "billDueDate": "03/20/2020",
+                "totalAmountDue": {
+                    "amt": "2080.43"
+                },
+                "ban": "100398965",
+                "billType": "ENBLR"
+            },
+            {
+                "statementID": "20200128-100398965-ENBLR-V",
+                "cycleStartDate": "12/29/2020",
+                "cycleEndDate": "01/28/2020",
+                "billDueDate": "02/13/2020",
+                "totalAmountDue": {
+                    "amt": "1650.09"
+                },
+                "ban": "100398965",
+                "billType": "ENBLR"
+            },
+            {
+                "statementID": "20191228-100398965-ENBLR-V",
+                "cycleStartDate": "11/29/2019",
+                "cycleEndDate": "12/28/2019",
+                "billDueDate": "01/29/2020",
+                "totalAmountDue": {
+                    "amt": "1219.75"
+                },
+                "ban": "100398965",
+                "billType": "ENBLR"
+            },
+            {
+                "statementID": "20191128-100398965-ENBLR-V",
+                "cycleStartDate": "10/29/2019",
+                "cycleEndDate": "11/28/2019",
+                "billDueDate": "12/21/2019",
+                "totalAmountDue": {
+                    "amt": "4990.12"
+                },
+                "ban": "100398965",
+                "billType": "ENBLR"
+            },
+            {
+                "statementID": "20191028-100398965-ENBLR-V",
+                "cycleStartDate": "09/29/2019",
+                "cycleEndDate": "10/28/2019",
+                "billDueDate": "11/14/2019",
+                "totalAmountDue": {
+                    "amt": "4645.32"
+                },
+                "ban": "100398965",
+                "billType": "ENBLR"
+            },
+            {
+                "statementID": "20190928-100398965-ENBLR-V",
+                "cycleStartDate": "08/29/2019",
+                "cycleEndDate": "09/28/2019",
+                "billDueDate": "10/14/2019",
+                "totalAmountDue": {
+                    "amt": "4259.73"
+                },
+                "ban": "100398965",
+                "billType": "ENBLR"
+            }
+        ]
+    }
+}
