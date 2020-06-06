@@ -37,13 +37,13 @@ http://www.mulesoft.org/schema/mule/att-mule-applicationlogger http://www.muleso
 		<ee:transform
 			xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core">
 			<ee:variables>
-				<ee:set-variable variableName="ban">attributes.uriParams.'ban'
-				</ee:set-variable>
-				<ee:set-variable variableName="billerId">attributes.uriParams.'billerId'
-				</ee:set-variable>
+				<ee:set-variable variableName="ban"><![CDATA[attributes.uriParams.'ban' default ""
+				]]></ee:set-variable>
+				<ee:set-variable variableName="billerId"><![CDATA[attributes.uriParams.'billerId' default ""
+				]]></ee:set-variable>
 			</ee:variables>
 		</ee:transform>
-	<att-mule-applicationlogger:log-message doc:name="Log Message" doc:id="cf40c681-9392-4034-b92b-1db47e18d499" config-ref="ATT_Mule_Application_Logger_Config" resPayload="#[vars.ban ++ '  ' ++ vars.billerId]"/>
+	<att-mule-applicationlogger:log-message doc:name="Log Message" doc:id="cf40c681-9392-4034-b92b-1db47e18d499" config-ref="ATT_Mule_Application_Logger_Config" message='#[payload]'/>
 		<http:request method="GET" doc:name="Billing History Request" doc:id="3a18f05d-07b4-419b-a507-44bad1cd423e" config-ref="HTTPS_Billing_MicroService_Request_config" path='${secure::billingMicroservice.http.billCycleHistoryPath}'>
 			<http:headers><![CDATA[#[output application/java
 ---
@@ -87,7 +87,7 @@ http://www.mulesoft.org/schema/mule/att-mule-applicationlogger http://www.muleso
 		</http:request>
 	</flow>
 	<flow
-		name="get:\billing\statements\(statementId)\PDF:customer-billing-billingdata-sapi-config">
+		name="get:\billing\statements\(statementId)\pdf:customer-billing-billingdata-sapi-config">
 		<ee:transform
 			xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core">
 			<ee:variables>

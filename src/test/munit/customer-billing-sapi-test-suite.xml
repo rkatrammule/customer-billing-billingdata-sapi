@@ -10,6 +10,14 @@
 	<munit:config name="new-test-suite.xml" />
 	<munit:test name="new-test-suite-get:\billing\accounts\(ban)\systems\(billerId)\history:customer-billing-billingdata-sapi-configTest" doc:id="c06c46c6-a9ed-44aa-a220-adafa603b9bf" description="Test">
 		<munit:execution >
+			<munit:set-event doc:name="Set Event" doc:id="85df31f8-e050-48db-98fa-26d629fc710b" >
+				<munit:attributes value='#[
+"uriParams" : {
+	"ban": 100398965,
+	"billerId" : "ENBLR"
+	}
+]' />				
+			</munit:set-event>
 			<flow-ref doc:name="Flow-ref to get:\billing\accounts\(ban)\systems\(billerId)\history:customer-billing-billingdata-sapi-config" doc:id="bafcf840-3ba8-4d1a-8477-502b300f0634" name="get:\billing\accounts\(ban)\systems\(billerId)\history:customer-billing-billingdata-sapi-config"/>
 		</munit:execution>
 	</munit:test>
@@ -20,7 +28,7 @@
 	</munit:test>
 	<munit:test name="new-test-suite-get:\billing\statements\(statementId)\PDF:customer-billing-billingdata-sapi-configTest" doc:id="a9e2aea6-3935-461b-bfa3-3e8163f11fd7" description="Test" ignore="true">
 		<munit:execution >
-			<flow-ref doc:name="Flow-ref to get:\billing\statements\(statementId)\PDF:customer-billing-billingdata-sapi-config" doc:id="5439f39f-9941-4d3b-8f63-14b033946370" name="get:\billing\statements\(statementId)\PDF:customer-billing-billingdata-sapi-config"/>
+			<flow-ref doc:name="Flow-ref to get:\billing\statements\(statementId)\pdf:customer-billing-billingdata-sapi-config" doc:id="5439f39f-9941-4d3b-8f63-14b033946370" name="get:\billing\statements\(statementId)\pdf:customer-billing-billingdata-sapi-config"/>
 		</munit:execution>
 	</munit:test>
 

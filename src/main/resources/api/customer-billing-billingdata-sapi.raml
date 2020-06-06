@@ -63,7 +63,7 @@ traits:
               body:
                 application/json:
                   !include examples/getBillDetailsResExample.json
-      /PDF:
+      /pdf:
         get:          
           is: [client-id-secret-required,]           
           responses:
