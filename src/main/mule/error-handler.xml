@@ -113,7 +113,7 @@ output application/json
 ---
 {
   success: false,
-  apiName: "customer-billing-crm-eapi",
+  apiName: "customer-billing-billingdata-sapi",
   version: "v1",
   idpTraceId: "f80c9750-0252-11ea-a538-f606160048e8",
   uuid: "23be1978-a451-11ea-bb37-0242ac130002",

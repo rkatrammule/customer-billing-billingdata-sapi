@@ -24,6 +24,11 @@ http://www.mulesoft.org/schema/mule/kafka http://www.mulesoft.org/schema/mule/ka
 		api="api\customer-billing-billingdata-sapi.raml"
 		outboundHeadersMapName="outboundHeaders"
 		httpStatusVarName="httpStatus" />
+	<apikit:config
+		name="customer-billing-billingdata-sapi-config"
+		api="customer-billing-billingdata-sapi.raml"
+		outboundHeadersMapName="outboundHeaders"
+		httpStatusVarName="httpStatus" />
 	<secure-properties:config
 		name="Secure_Properties_Config" doc:name="Secure Properties Config"
 		doc:id="2cff4c72-8018-4e30-a7c1-363fd8ee6091"
