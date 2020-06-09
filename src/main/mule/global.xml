@@ -36,7 +36,7 @@ http://www.mulesoft.org/schema/mule/kafka http://www.mulesoft.org/schema/mule/ka
 		key="${mule.key}" />
 	<global-property doc:name="Global Property"
 		doc:id="6c83b6fd-5fde-4bdc-9802-bc162845d4d9" name="mule.env"
-		value="dev" />
+		value="local" />
 	<global-property doc:name="Global Property"
 		doc:id="b13e68df-792d-4dae-8b6b-4715a98c2656" name="mule.key"
 		value="mKxTq&amp;W]\@+s(/3&amp;" />
