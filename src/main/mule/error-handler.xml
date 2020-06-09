@@ -8,7 +8,7 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
 http://www.mulesoft.org/schema/mule/att-mule-applicationlogger http://www.mulesoft.org/schema/mule/att-mule-applicationlogger/current/mule-att-mule-applicationlogger.xsd">
-	<error-handler>
+	<error-handler name="globalError_Handler">
 		<on-error-propagate type="APIKIT:BAD_REQUEST">
 			<ee:transform
 				xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
@@ -101,8 +101,11 @@ output application/json
 				</ee:variables>
 			</ee:transform>
 		</on-error-propagate>
+		<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="7a09570b-6ee1-447d-a4da-914dc862b087" type="ANY">
+			<flow-ref doc:name="build-error-flow" doc:id="96761eaf-f573-43a4-858a-ac600846d9b0" name="build-error-flow"/>
+		</on-error-propagate>
 	</error-handler>
-	<flow name="error-handlerFlow"
+	<flow name="build-error-flow"
 		doc:id="77d1c157-d103-4b9c-983b-ddd6df780dbc">
 		<ee:transform
 			xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
@@ -120,7 +123,7 @@ output application/json
   timestamp: "2020-05-21T13:09:57.714-05:00",
   errorDetails: {
     code: 500,
-    message: "Internal Server Error. There were issues accessing the Billing API",
+    message: error.errorMessage.payload,
     additionalInfo: "Bad Connectivity : There were issues accessing the Billing API."
   }
 }]]></ee:set-payload>

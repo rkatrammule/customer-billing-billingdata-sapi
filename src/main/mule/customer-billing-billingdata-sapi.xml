@@ -38,16 +38,33 @@ http://www.mulesoft.org/schema/mule/att-mule-applicationlogger http://www.muleso
 				]]></ee:set-variable>
 			</ee:variables>
 		</ee:transform>
-	<att-mule-applicationlogger:log-message doc:name="Log Message" doc:id="cf40c681-9392-4034-b92b-1db47e18d499" config-ref="ATT_Mule_Application_Logger_Config" message='#[payload]'/>
-		<http:request method="GET" doc:name="Billing History Request" doc:id="3a18f05d-07b4-419b-a507-44bad1cd423e" config-ref="HTTPS_Billing_MicroService_Request_config" path='${secure::billingMicroservice.http.billCycleHistoryPath}'>
-			<http:headers><![CDATA[#[output application/java
+	<ee:transform doc:name="Transform Message" doc:id="09956caa-8366-4af8-9d9f-b64f92187f4c">			
+			<ee:variables >
+				<ee:set-variable variableName="billingHeader" ><![CDATA[%dw 2.0
+output application/json
 ---
 {
+	idpctxHeaders : if(vars.billerId =='TLG')  
+					{
 	"Authorization":"Basic bTIzOTgwQGlkcC5hdHQuY29tOmlkcEs4c3J2Y3NBdXRobnAhIQ==",
 	"Accept": "application/json",
 	"Content-Type": "application/json",
-	"Idpctx-linkeduverseaccnums": "100398965"
-}]]]></http:headers>
+	"Idpctx-linkedwirelessaccnums": vars.ban
+}
+				else if(vars.billerId =='ENBLR')  
+				{
+	"Authorization":"Basic bTIzOTgwQGlkcC5hdHQuY29tOmlkcEs4c3J2Y3NBdXRobnAhIQ==",
+	"Accept": "application/json",
+	"Content-Type": "application/json",
+	"Idpctx-linkeduverseaccnums": vars.ban
+}
+				else ''
+}]]></ee:set-variable>
+			</ee:variables>
+		</ee:transform>
+		<att-mule-applicationlogger:log-message doc:name="Log Message" doc:id="cf40c681-9392-4034-b92b-1db47e18d499" config-ref="ATT_Mule_Application_Logger_Config" message='#[payload]'/>
+		<http:request method="GET" doc:name="Billing History Request" doc:id="3a18f05d-07b4-419b-a507-44bad1cd423e" config-ref="HTTPS_Billing_MicroService_Request_config" path='${secure::billingMicroservice.http.billCycleHistoryPath}'>
+			<http:headers><![CDATA[#[vars.billingHeader.idpctxHeaders]]]></http:headers>
 			<http:uri-params ><![CDATA[#[output application/java
 ---
 {
