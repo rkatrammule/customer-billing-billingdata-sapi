@@ -30,87 +30,15 @@ http://www.mulesoft.org/schema/mule/att-mule-applicationlogger http://www.muleso
 	</flow>
 	<flow
 		name="get:\billing\accounts\(ban)\systems\(billerId)\history:customer-billing-billingdata-sapi-config">
-		<ee:transform
-			xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core">
-			<ee:variables>
-				<ee:set-variable variableName="ban"><![CDATA[attributes.uriParams.'ban' default ""
-				]]></ee:set-variable>
-				<ee:set-variable variableName="billerId"><![CDATA[attributes.uriParams.'billerId' default ""
-				]]></ee:set-variable>
-			</ee:variables>
-		</ee:transform>
-	<ee:transform doc:name="Transform Message" doc:id="09956caa-8366-4af8-9d9f-b64f92187f4c">			
-			<ee:variables >
-				<ee:set-variable variableName="billingHeader" ><![CDATA[%dw 2.0
-output application/json
----
-{
-	idpctxHeaders : if(vars.billerId =='TLG')  
-					{
-	"Authorization":"Basic bTIzOTgwQGlkcC5hdHQuY29tOmlkcEs4c3J2Y3NBdXRobnAhIQ==",
-	"Accept": "application/json",
-	"Content-Type": "application/json",
-	"Idpctx-linkedwirelessaccnums": vars.ban
-}
-				else if(vars.billerId =='ENBLR')  
-				{
-	"Authorization":"Basic bTIzOTgwQGlkcC5hdHQuY29tOmlkcEs4c3J2Y3NBdXRobnAhIQ==",
-	"Accept": "application/json",
-	"Content-Type": "application/json",
-	"Idpctx-linkeduverseaccnums": vars.ban
-}
-				else ''
-}]]></ee:set-variable>
-			</ee:variables>
-		</ee:transform>
-		<att-mule-applicationlogger:log-message doc:name="Log Message" doc:id="cf40c681-9392-4034-b92b-1db47e18d499" config-ref="ATT_Mule_Application_Logger_Config" message='#[payload]'/>
-		<http:request method="GET" doc:name="Billing History Request" doc:id="3a18f05d-07b4-419b-a507-44bad1cd423e" config-ref="HTTPS_Billing_MicroService_Request_config" path='${secure::billingMicroservice.http.billCycleHistoryPath}'>
-			<http:headers><![CDATA[#[vars.billingHeader.idpctxHeaders]]]></http:headers>
-			<http:uri-params ><![CDATA[#[output application/java
----
-{
-	"biller" : vars.billerId,
-	"ban" : vars.ban
-}]]]></http:uri-params>
-		</http:request>
+		<flow-ref doc:name="retrieve-billing-history-sub-flow" doc:id="5069ec24-1b29-4736-bb57-a09e7e968205" name="retrieve-billing-history-sub-flow" />
 		</flow>
 	
 	<flow
 		name="get:\billing\statements\(statementId)\details:customer-billing-billingdata-sapi-config">
-		<ee:transform doc:name="Transform Message" doc:id="63a33b77-460e-41b3-a85d-cb014f3717c4" >			
-			<ee:variables >
-				<ee:set-variable variableName = "statementId">attributes.uriParams.'statementId'</ee:set-variable>
-			</ee:variables>
-		</ee:transform>
-		<flow-ref doc:name="set-bill-details-headers-sub-flow" doc:id="96d3863a-4246-4ee1-8844-69c5f6c0047f" name="set-bill-details-headers-sub-flow" />
-		<att-mule-applicationlogger:log-message doc:name="Log Message" doc:id="1a4879a0-37f9-4afd-acc1-0124bcf761eb" config-ref="ATT_Mule_Application_Logger_Config" resPayload="#[vars.statementId]"/>
-		<http:request method="GET" doc:name="Bill Details Request" doc:id="a0736a80-6ffd-4c17-895a-a999ac20f163" config-ref="HTTPS_Billing_MicroService_Request_config" path='${secure::billingMicroservice.http.billDetailsPath}'>
-			<http:headers><![CDATA[#[vars.billingHeader.idpctxHeaders]]]></http:headers>
-			<http:uri-params ><![CDATA[#[output application/java
----
-{
-	"statementID" : vars.statementId
-}]]]></http:uri-params>
-		</http:request>
+		<flow-ref doc:name="get-statement-details-sub-flow" doc:id="3bad5563-a9df-4554-b14c-926eec8aa8ab" name="get-statement-details-sub-flow" />
 	</flow>
 	<flow
 		name="get:\billing\statements\(statementId)\pdf:customer-billing-billingdata-sapi-config">
-		<ee:transform
-			xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core">
-			<ee:variables>
-				<ee:set-variable variableName="statementId">attributes.uriParams.'statementId'
-				</ee:set-variable>
-			</ee:variables>
-		</ee:transform>	
-		<flow-ref doc:name="set-bill-details-headers-sub-flow" doc:id="65d90f60-e126-4371-a39c-e74064d98f6b" name="set-bill-details-headers-sub-flow"/>
-		<att-mule-applicationlogger:log-message doc:name="Log Message" doc:id="c406b697-d7f5-4a17-a5fb-117270e1b99e" config-ref="ATT_Mule_Application_Logger_Config" resPayload="#[vars.statementId]"/>	
-		<http:request method="GET" doc:name="Bill PDF Request" doc:id="67cec755-5a6e-4502-818a-c800bc138913" config-ref="HTTPS_Billing_MicroService_Request_config" path='${secure::billingMicroservice.http.billPdfPath}'>
-			<http:headers><![CDATA[#[vars.billingHeader.idpctxHeaders]]]></http:headers>
-			<http:uri-params ><![CDATA[#[output application/java
----
-{
-	"statementID" : vars.statementId
-}]]]></http:uri-params>
-		</http:request>
+		<flow-ref doc:name="get-statement-pdf-sub-flow" doc:id="aaec5a5b-55aa-45c8-a253-7c1cbb58a444" name="get-statement-pdf-sub-flow" />
 	</flow>
 </mule>
