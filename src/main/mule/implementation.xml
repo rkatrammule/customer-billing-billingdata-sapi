@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd">
+	<sub-flow name="set-bill-details-headers-sub-flow"
+		doc:id="26f81525-9793-4b94-a36c-bd92e5a5afe5">
+		<set-variable value="#[splitBy(vars.statementId,'-')[2]]"
+			doc:name="billerId" doc:id="4415e0d1-8539-4315-9330-e72c1d1abc15"
+			variableName="billerId" />
+		<set-variable value="#[splitBy(vars.statementId,'-')[1]]"
+			doc:name="ban" doc:id="3ca57c37-c7f3-400d-acbf-1a0e789b5a51"
+			variableName="ban" />
+		<ee:transform doc:name="Transform Message"
+			doc:id="ce437556-620e-452a-ac33-328f828c9fa0">
+			<ee:variables>
+				<ee:set-variable variableName="billingHeader"><![CDATA[%dw 2.0
+output application/json
+---
+{
+	idpctxHeaders : if(vars.billerId =='TLG')  
+					{
+	"Authorization":"Basic bTIzOTgwQGlkcC5hdHQuY29tOmlkcEs4c3J2Y3NBdXRobnAhIQ==",
+	"Accept": "application/json",
+	"Content-Type": "application/json",
+	"Idpctx-linkedwirelessaccnums": vars.ban
+}
+				else if(vars.billerId =='ENBLR')  
+				{
+	"Authorization":"Basic bTIzOTgwQGlkcC5hdHQuY29tOmlkcEs4c3J2Y3NBdXRobnAhIQ==",
+	"Accept": "application/json",
+	"Content-Type": "application/json",
+	"Idpctx-linkeduverseaccnums": vars.ban
+	
+}
+				else ''
+}]]></ee:set-variable>
+			</ee:variables>
+		</ee:transform>
+	</sub-flow>
+</mule>

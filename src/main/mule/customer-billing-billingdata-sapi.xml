@@ -9,6 +9,7 @@
 http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
 http://www.mulesoft.org/schema/mule/att-mule-applicationlogger http://www.mulesoft.org/schema/mule/att-mule-applicationlogger/current/mule-att-mule-applicationlogger.xsd">
 
+	
 	<flow name="customer-billing-billingdata-sapi-main">
 		<http:listener
 			config-ref="customer-billing-billingdata-sapi-httpListenerConfig"
@@ -81,16 +82,10 @@ output application/json
 				<ee:set-variable variableName = "statementId">attributes.uriParams.'statementId'</ee:set-variable>
 			</ee:variables>
 		</ee:transform>
+		<flow-ref doc:name="set-bill-details-headers-sub-flow" doc:id="96d3863a-4246-4ee1-8844-69c5f6c0047f" name="set-bill-details-headers-sub-flow" />
 		<att-mule-applicationlogger:log-message doc:name="Log Message" doc:id="1a4879a0-37f9-4afd-acc1-0124bcf761eb" config-ref="ATT_Mule_Application_Logger_Config" resPayload="#[vars.statementId]"/>
 		<http:request method="GET" doc:name="Bill Details Request" doc:id="a0736a80-6ffd-4c17-895a-a999ac20f163" config-ref="HTTPS_Billing_MicroService_Request_config" path='${secure::billingMicroservice.http.billDetailsPath}'>
-			<http:headers><![CDATA[#[output application/java
----
-{
-	"Authorization":"Basic bTIzOTgwQGlkcC5hdHQuY29tOmlkcEs4c3J2Y3NBdXRobnAhIQ==",
-	"Accept": "application/json",
-	"Content-Type": "application/json",
-	"Idpctx-linkeduverseaccnums": "100398965"
-}]]]></http:headers>
+			<http:headers><![CDATA[#[vars.billingHeader.idpctxHeaders]]]></http:headers>
 			<http:uri-params ><![CDATA[#[output application/java
 ---
 {
@@ -107,16 +102,10 @@ output application/json
 				</ee:set-variable>
 			</ee:variables>
 		</ee:transform>	
+		<flow-ref doc:name="set-bill-details-headers-sub-flow" doc:id="65d90f60-e126-4371-a39c-e74064d98f6b" name="set-bill-details-headers-sub-flow"/>
 		<att-mule-applicationlogger:log-message doc:name="Log Message" doc:id="c406b697-d7f5-4a17-a5fb-117270e1b99e" config-ref="ATT_Mule_Application_Logger_Config" resPayload="#[vars.statementId]"/>	
 		<http:request method="GET" doc:name="Bill PDF Request" doc:id="67cec755-5a6e-4502-818a-c800bc138913" config-ref="HTTPS_Billing_MicroService_Request_config" path='${secure::billingMicroservice.http.billPdfPath}'>
-			<http:headers><![CDATA[#[output application/java
----
-{
-	"Authorization":"Basic bTIzOTgwQGlkcC5hdHQuY29tOmlkcEs4c3J2Y3NBdXRobnAhIQ==",
-	"Accept": "application/json",
-	"Content-Type": "application/json",
-	"Idpctx-linkeduverseaccnums": "100398965"
-}]]]></http:headers>
+			<http:headers><![CDATA[#[vars.billingHeader.idpctxHeaders]]]></http:headers>
 			<http:uri-params ><![CDATA[#[output application/java
 ---
 {
