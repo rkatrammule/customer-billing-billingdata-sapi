@@ -24,6 +24,8 @@ http://www.mulesoft.org/schema/mule/att-mule-applicationlogger http://www.muleso
 				<http:headers>#[vars.outboundHeaders default {}]</http:headers>
 			</http:error-response>
 		</http:listener>
+		<set-variable value="#[attributes.headers.uuid default uuid()]" doc:name="uuid" doc:id="023b29ac-8798-4daa-a313-de8414b63a58" variableName="uuid"/>
+		<set-variable value="#[attributes.headers.'idp-trace-id']" doc:name="idpTraceId" doc:id="9717ed57-4dad-422b-8d50-ff486de3158b" variableName="idpTraceId"/>
 		<apikit:router
 			config-ref="customer-billing-billingdata-sapi-config" />
 
