@@ -20,10 +20,6 @@ http://www.mulesoft.org/schema/mule/att-mule-applicationlogger http://www.muleso
 http://www.mulesoft.org/schema/mule/tls http://www.mulesoft.org/schema/mule/tls/current/mule-tls.xsd
 http://www.mulesoft.org/schema/mule/api-gateway http://www.mulesoft.org/schema/mule/api-gateway/current/mule-api-gateway.xsd
 http://www.mulesoft.org/schema/mule/kafka http://www.mulesoft.org/schema/mule/kafka/current/mule-kafka.xsd">
-	<apikit:config name="cutomer-billing-system-api-config"
-		api="api\customer-billing-billingdata-sapi.raml"
-		outboundHeadersMapName="outboundHeaders"
-		httpStatusVarName="httpStatus" />
 	<apikit:config
 		name="customer-billing-billingdata-sapi-config"
 		api="customer-billing-billingdata-sapi.raml"
